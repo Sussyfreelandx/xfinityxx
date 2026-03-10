@@ -55,7 +55,7 @@
 		<noscript>
 			<link rel="stylesheet" type="text/css" href="/static/resi/dist/noscript-styles-cd6dc29.css" />
 		</noscript>
-	<script src="./xfinity_files/AppMeasurement.min.js.download" async=""></script><script src="./xfinity_files/AppMeasurement_Module_ActivityMap.min.js.download" async=""></script><script src="./xfinity_files/AppMeasurement_Module_AudienceManagement.min.js.download" async=""></script><style id="polaris-styles">@font-face {
+	<style id="polaris-styles">@font-face {
   font-family: 'XfinityBrown';
 
   src: url('https://static.cimcontent.net/common-web-assets/fonts/xfinity-brown-optimized/xfinitybrown-bold.woff2') format('woff2'), url('https://static.cimcontent.net/common-web-assets/fonts/xfinity-brown-optimized/xfinitybrown-bold.woff') format('woff'), url('https://static.cimcontent.net/common-web-assets/fonts/xfinity-brown-optimized/xfinitybrown-bold.ttf') format('truetype');
@@ -3263,7 +3263,6 @@ xc-footer > div:nth-child(2) { display: none !important; }
 		
 		
 				
-                    <script src="./xfinity_files/launch-46f715e51bac.min.js.download"></script><script type="text/javascript" src="./xfinity_files/saved_resource"></script>
     
 	<script type="tracking-data-digitalData">
 		{
@@ -3328,225 +3327,8 @@ xc-footer > div:nth-child(2) { display: none !important; }
                 }));
             });
                     </script>
-    	<script type="text/javascript" src="./xfinity_files/7Vm5PY1YB"></script>
 
-<script>_satellite["_runScript1"](function(event, target, Promise) {
-/**
- * JS Util functions for Adobe Launch Data Elements and Rules.
- * 
- * version: 1.0.0
- */
-window.adobe = window.adobe || {};
-window.adobe.consulting = window.adobe.consulting || {};
-window.adobe.consulting.util = window.adobe.consulting.util || {};
-window.Flickerlessly = window.Flickerlessly || {}, function (t) { "use strict"; var i = function (t, n, a, o) { var i = "atNodeInserted" + t, r = [], e = ["", "-moz-", "-webkit-", "-ms-", "-o-"]; e.forEach(function (t, e) { r.push("@" + t + "keyframes " + i + " {from {opacity:0.99} to {opacity:1}}") }), r.push(n + "{"), e.forEach(function (t, e) { r.push(t + "animation-duration:0.001s;" + t + "animation-name:" + i + ";") }), r.push("}"); var s = document.getElementsByTagName("head")[0]; if (s) { var c = document.createElement("style"); c.setAttribute("type", "text/css"), c.styleSheet ? c.styleSheet.cssText = r.join("\n") : c.appendChild(document.createTextNode(r.join("\n"))), s.insertBefore(c, s.firstChild) } var l = function (t) { if (t.animationName === i && "object" == typeof t.target) { var e = !0 === o || !1 === o && null === t.target.getAttribute("data-flk-success"); u("('" + n + "') ready! Execute: " + e, t.target), "function" == typeof a && e ? (t.target.setAttribute("data-flk-success", i), !0 !== o && (["animationstart", "MSAnimationStart", "webkitAnimationStart"].forEach(function (t, e) { document.removeEventListener(t, l, !1) }), c && c.parentNode.removeChild(c)), a(t.target, u)) : u("Won't Callback", e, a) } };["animationstart", "MSAnimationStart", "webkitAnimationStart"].forEach(function (t, e) { document.addEventListener(t, l, !1) }) }, u = -1 !== window.location.href.indexOf("Debug=1") ? function () { Array.prototype.unshift.call(arguments, "FLK:"), console.info.apply(this, arguments) } : function () { }, r = Math.floor(1e3 * Math.random() + 1); t.onReady = function () { for (var t = 0; t < arguments.length; t++) { var e = arguments[t], n = e.selector, a = e.success || null, o = e.persist || !1; i(r++, n, a, o) } } }(Flickerlessly);
-
-(function (A) {
-
-  // Get the value from an object heirarchy. Usage :- window.adobe.consulting.util.getObjVal(<base object>, <heirarchy under base object as a string>, <default value (optional), this will be returned if the object is not found>);
-  A.getObjVal = function (obj, prop, defVal) {
-    defVal = defVal || "";
-    if (!obj || !prop || typeof prop != "string") { _satellite.logger.info("!*!*!* WARNING !*!*!* 'Object' or 'Path' is missing or invalid"); return defVal; }
-    var props = prop.split("."), i;
-    for (i = 0; i < props.length; i += 1) {
-      if (typeof obj[props[i]] !== "undefined") { obj = obj[props[i]]; } else { _satellite.logger.info("!*!*!* WARNING !*!*!* " + props[i] + " could not be found under path " + prop); return defVal; }
-    }
-    return obj;
-  };
-
-  A.resetState = function () {
-    // Resetting Variable for holding Campaign/Experience qualification for each page/view
-    window.ttMETA = [];
-
-    //Resetting SDID for A4T integration.
-    var visitor = Visitor.getInstance("DA11332E5321D0550A490D45@AdobeOrg");
-    visitor.resetState();
-  };
-
-  A.loadJS = function (url, location, cb) {
-    var scriptTag = document.createElement('script');
-    scriptTag.src = url;
-    if (typeof cb == "function") {
-      scriptTag.onload = cb;
-    }
-    location.appendChild(scriptTag);
-  };
-
-  A.getAPI = function (url, successHandler, errorHandler, headers) {
-    var xhr = typeof XMLHttpRequest != 'undefined'
-      ? new XMLHttpRequest()
-      : new ActiveXObject('Microsoft.XMLHTTP');
-    xhr.open('get', url, true);
-    if (headers) {
-      for (var i = 0, j = Object.keys(headers); i < j.length; i++) {
-        xhr.setRequestHeader(j[i], headers[j[i]]);
-      }
-    }
-    xhr.withCredentials = true;// Must follow xhr.open to avoid InvalidStateError
-    xhr.onreadystatechange = function () {
-      var status, data;
-      if (xhr.readyState == 4) {
-        status = xhr.status;
-        if (status == 200) {
-          data = JSON.parse(xhr.responseText);
-          successHandler && successHandler(data);
-        } else {
-          errorHandler && errorHandler(status);
-        }
-      }
-    };
-    xhr.send();
-  };
-
-  A.fireCustomEvent = function (name, details) {
-    var event = new CustomEvent(name, {
-      detail: {
-        source: "dtm",
-        data: details
-      }
-    });
-    document.dispatchEvent(event);
-  };
-
-  A.numberOfDaysPassed = function (fromDate) {
-    if (fromDate == "") return "";
-
-    var fromDateArr = fromDate.split("-");
-
-    if (fromDateArr.length != 3 || isNaN(new Date(fromDate))) {
-      console.log("Invalid Date given for function window.adobe.consulting.util.numberOfDaysPassed()");
-      return NaN;
-    }
-
-    var currDate = new Date();
-    var utcFromDate = new Date(Date.UTC(fromDateArr[0], fromDateArr[1] - 1, fromDateArr[2], 24, 0, 0, 0));
-    var utcCurrentDate = Date.UTC(currDate.getFullYear(), currDate.getMonth(), currDate.getDate(), 24, 0, 0, 0);
-
-    var dateDiff = utcCurrentDate - utcFromDate;
-
-    return A.dhm(dateDiff)[0];
-  };
-
-  A.getUrlParameter = function (name) {
-    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-    var results = regex.exec(location.search);
-    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-  };
-
-  A.dhm = function (t) {
-    var cd = 24 * 60 * 60 * 1000,
-      ch = 60 * 60 * 1000,
-      d = Math.floor(t / cd),
-      h = Math.floor((t - d * cd) / ch),
-      m = Math.round((t - d * cd - h * ch) / 60000),
-      pad = function (n) { return n < 10 ? '0' + n : n; };
-    if (m === 60) {
-      h++;
-      m = 0;
-    }
-    if (h === 24) {
-      d++;
-      h = 0;
-    }
-    return [d, pad(h), pad(m)];
-  };
-
-  A.getMetaContentByName = function (name, content) {
-    var content = (content == null) ? 'content' : content, metaObj = document.querySelector("meta[name='" + name + "']");
-    return metaObj != null ? metaObj.getAttribute(content) != null ? metaObj.getAttribute(content).toLowerCase() : "" : "";
-  };
-
-  A.fireTargetCustomMbox = function (name, params) {
-    adobe.target.getOffer({
-      mbox: name,
-      params: params,
-      success: function (offer) {
-        adobe.target.applyOffer({
-          "mbox": name,
-          "offer": offer
-        });
-      },
-      error: function (status, error) {
-        _satellite.logger.warn("Adobe Target custom mBox ( " + name + " ) request did not succeed :: ", status, error);
-      }
-    });
-  };
-
-  A.getEventInfo = function (eventMethod, DL_path, eventName, defValue) {
-    defValue = defValue || "";
-    var DL_events = digitalData.event;
-    for (var x = 0; x < DL_events.length; x++) {
-      if (DL_events[x].eventInfo.eventMethod && DL_events[x].eventInfo.eventMethod == eventMethod) {
-        if (typeof eventName !== "undefined") {
-          return (DL_events[x].eventInfo.eventName == eventName) ? A.getObjVal(DL_events[x].eventInfo, DL_path, defValue) : "";
-        }
-        return A.getObjVal(DL_events[x].eventInfo, DL_path, defValue);
-      }
-    }
-    return defValue;
-  };
-
-
-  //getGBB Offers
-  A.getGBBHomeOffer = function (ruleid, tokenname) {
-    return new Promise(function (resolve, reject) {
-      try {
-        var match = /&RC.MKT=(\d+)&/gm.exec(_satellite.getVar("Cookie | PSC")),
-          marketID = match && match[1],
-          apiURL = marketID && ruleid && tokenname && "https://xapi.xfinity.com/markets/" + marketID + "/rules/" + ruleid + "/FeaturedOffers/V2?tokenname=" + tokenname;
-
-        function apiSuccessHandler(data) {
-          resolve(data.featuredOffers);
-        }
-
-        function apiErrorHandler(data) {
-          reject(data);
-        }
-
-        if (apiURL) {
-          A.getAPI(apiURL, apiSuccessHandler, apiErrorHandler);
-        }
-        else {
-          reject("Invalid arguments");
-        }
-      }
-      catch (e) {
-        reject(e);
-      }
-    });
-  };
-
-  //Searches a single or an array of objects for key and value match
-  A.searchObjVal = function (objectRoot, keyArray, valueArray) {
-    objectRoot = objectRoot || []; keyArray = keyArray || []; valueArray = valueArray || [];
-    var goodArguments = !(!(typeof objectRoot == "object") || !keyArray.length || !valueArray.length);
-    var matchFound = false;
-    if (!goodArguments) {
-      console.error("Warning :: Invalid Arguments for function adobe.consulting.util.getMOV()");
-      return {};
-    }
-    if (Array.isArray(objectRoot) && objectRoot.length) {
-      for (var x = 0; x < objectRoot.length; x++) {
-        var result = A.searchObjVal(objectRoot[x], keyArray, valueArray);
-        if (result) return result;
-      }
-    }
-    for (var y = 0; y < keyArray.length; y++) {
-      matchFound = valueArray[y] && A.getObjVal(objectRoot, keyArray[y]) == valueArray[y] ? true : false;
-      if (!matchFound) {
-        return null
-      }
-    }
-    return objectRoot;
-  };
-
-  // Will depreciate once all uses of getMOV are removed
-  A.getMOV = A.searchObjVal
-
-}(window.adobe.consulting.util));
-
-});</script><iframe sandbox="allow-scripts allow-same-origin" title="Adobe ID Syncing iFrame" id="destination_publishing_iframe_comcast_0" name="destination_publishing_iframe_comcast_0_name" src="./xfinity_files/dest5.html" class="aamIframeLoaded" style="display: none; width: 0px; height: 0px;"></iframe><div id="onetrust-consent-sdk" data-nosnippet="true"><div class="onetrust-pc-dark-filter ot-hide ot-fade-in"></div><div id="onetrust-pc-sdk" class="otPcCenter ot-hide ot-fade-in otRelFont" lang="en" aria-label="Preference center" role="region"><div role="dialog" aria-modal="true" style="height: 100%;" aria-label="Your Cookie Preferences"><!-- Close Button --><div class="ot-pc-header"><!-- Logo Tag --><div class="ot-pc-logo" role="img" aria-label="Company Logo"><img alt="Company Logo" src="./xfinity_files/ot_company_logo.png"></div><button id="close-pc-btn-handler" class="ot-close-icon" aria-label="Close preference center" style="background-image: url(&quot;https://cdn.cookielaw.org/logos/static/ot_close.svg&quot;);"></button></div><!-- Close Button --><div id="ot-pc-content" class="ot-pc-scrollbar"><div class="ot-optout-signal ot-hide"><div class="ot-optout-icon"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path class="ot-floating-button__svg-fill" d="M14.588 0l.445.328c1.807 1.303 3.961 2.533 6.461 3.688 2.015.93 4.576 1.746 7.682 2.446 0 14.178-4.73 24.133-14.19 29.864l-.398.236C4.863 30.87 0 20.837 0 6.462c3.107-.7 5.668-1.516 7.682-2.446 2.709-1.251 5.01-2.59 6.906-4.016zm5.87 13.88a.75.75 0 00-.974.159l-5.475 6.625-3.005-2.997-.077-.067a.75.75 0 00-.983 1.13l4.172 4.16 6.525-7.895.06-.083a.75.75 0 00-.16-.973z" fill="#FFF" fill-rule="evenodd"></path></svg></div><span></span></div><h2 id="ot-pc-title">Your Cookie Preferences</h2><div id="ot-pc-desc">Like many companies, we use cookies and other common tracking technologies (Cookies) to optimize and analyze your experience on our Services, and serve ads relevant to your interests. You may choose which Cookies to allow, and can change your preferences at any time on this device. If you decline or remove Cookies, some parts of the Services may not function properly. Please go <a href="https://www.xfinity.com/privacy/your-privacy-choices" target="_blank" class="privacy-notice-link-alt" rel="noopener noreferrer nofollow">here</a>to see what other choices you can make, including to manage account-based and other sharing or sales opt outs. Learn more in our <a href="https://www.xfinity.com/privacy/policy/cookienotice" target="_blank" class="privacy-notice-link-alt" rel="noopener noreferrer nofollow">Cookie Policy.</a>
+<div id="onetrust-consent-sdk" data-nosnippet="true"><div class="onetrust-pc-dark-filter ot-hide ot-fade-in"></div><div id="onetrust-pc-sdk" class="otPcCenter ot-hide ot-fade-in otRelFont" lang="en" aria-label="Preference center" role="region"><div role="dialog" aria-modal="true" style="height: 100%;" aria-label="Your Cookie Preferences"><!-- Close Button --><div class="ot-pc-header"><!-- Logo Tag --><div class="ot-pc-logo" role="img" aria-label="Company Logo"><img alt="Company Logo" src="./xfinity_files/ot_company_logo.png"></div><button id="close-pc-btn-handler" class="ot-close-icon" aria-label="Close preference center" style="background-image: url(&quot;https://cdn.cookielaw.org/logos/static/ot_close.svg&quot;);"></button></div><!-- Close Button --><div id="ot-pc-content" class="ot-pc-scrollbar"><div class="ot-optout-signal ot-hide"><div class="ot-optout-icon"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path class="ot-floating-button__svg-fill" d="M14.588 0l.445.328c1.807 1.303 3.961 2.533 6.461 3.688 2.015.93 4.576 1.746 7.682 2.446 0 14.178-4.73 24.133-14.19 29.864l-.398.236C4.863 30.87 0 20.837 0 6.462c3.107-.7 5.668-1.516 7.682-2.446 2.709-1.251 5.01-2.59 6.906-4.016zm5.87 13.88a.75.75 0 00-.974.159l-5.475 6.625-3.005-2.997-.077-.067a.75.75 0 00-.983 1.13l4.172 4.16 6.525-7.895.06-.083a.75.75 0 00-.16-.973z" fill="#FFF" fill-rule="evenodd"></path></svg></div><span></span></div><h2 id="ot-pc-title">Your Cookie Preferences</h2><div id="ot-pc-desc">Like many companies, we use cookies and other common tracking technologies (Cookies) to optimize and analyze your experience on our Services, and serve ads relevant to your interests. You may choose which Cookies to allow, and can change your preferences at any time on this device. If you decline or remove Cookies, some parts of the Services may not function properly. Please go <a href="https://www.xfinity.com/privacy/your-privacy-choices" target="_blank" class="privacy-notice-link-alt" rel="noopener noreferrer nofollow">here</a>to see what other choices you can make, including to manage account-based and other sharing or sales opt outs. Learn more in our <a href="https://www.xfinity.com/privacy/policy/cookienotice" target="_blank" class="privacy-notice-link-alt" rel="noopener noreferrer nofollow">Cookie Policy.</a>
 <br><br>
 <a id="accept-recommended-btn-handler" class="subbed-btn-link">Accept All</a><a id="refuse-all-link" class="ot-pc-refuse-all-handler subbed-btn-link">Decline All</a>
             <br><a href="https://www.xfinity.com/privacy/policy/cookienotice" class="privacy-notice-link" rel="noopener" target="_blank" aria-label="More information about your privacy, opens in a new tab">Cookie Policy</a></div><button id="accept-recommended-btn-handler" ot-button-order="0">Allow all</button><section class="ot-sdk-row ot-cat-grp"><h3 id="ot-category-title"> Manage Consent Preferences</h3><div class="ot-cat-item ot-always-active-group ot-vs-config" data-optanongroupid="1"><!-- Group name --><h4 class="ot-cat-header" id="ot-header-id-1">Strictly Necessary</h4><div id="ot-status-id-1" class="ot-always-active">Always On</div><!-- Group description --><p class="ot-category-desc" id="ot-desc-id-1">These Cookies are required for Service functionality, including for system administration, security, and fraud prevention, and to enable any purchasing capabilities. You can set your browser to block these Cookies, but some parts of the site may not function properly. </p><div class="ot-hlst-cntr"><button class="ot-link-btn category-host-list-handler" dir="ltr" aria-label="Strictly Necessary - Cookie Details button opens Cookie List menu" data-parent-id="1">View Details</button></div></div><div class="ot-cat-item ot-vs-config" data-optanongroupid="2"><!-- Group name --><h4 class="ot-cat-header" id="ot-header-id-2">Analytics and Performance</h4><div class="ot-tgl"><input type="checkbox" name="ot-group-id-2" id="ot-group-id-2" class="category-switch-handler" data-optanongroupid="2" checked="" aria-labelledby="ot-header-id-2"> <label class="ot-switch" for="ot-group-id-2"><span class="ot-switch-nob"></span> <span class="ot-label-txt">Analytics and Performance</span></label> </div><!-- Group description --><p class="ot-category-desc" id="ot-desc-id-2">These Cookies collect data regarding your usage of and performance of the Services. We and our vendors use these Cookies to perform analytics, to improve the content and user experience, for statistical purposes, to improve the Services, and develop new ones. They are also used to recognize your device across platforms and devices for the above purposes. </p><div class="ot-hlst-cntr"><button class="ot-link-btn category-host-list-handler" dir="ltr" aria-label="Analytics and Performance - Cookie Details button opens Cookie List menu" data-parent-id="2">View Details</button></div></div><div class="ot-cat-item ot-vs-config" data-optanongroupid="4"><!-- Group name --><h4 class="ot-cat-header" id="ot-header-id-4">Personalized Advertising</h4><div class="ot-tgl"><input type="checkbox" name="ot-group-id-4" id="ot-group-id-4" class="category-switch-handler" data-optanongroupid="4" checked="" aria-labelledby="ot-header-id-4"> <label class="ot-switch" for="ot-group-id-4"><span class="ot-switch-nob"></span> <span class="ot-label-txt">Personalized Advertising</span></label> </div><!-- Group description --><p class="ot-category-desc" id="ot-desc-id-4">These Cookies collect data about your website visits, your use of the Services, your preferences, and your interaction with advertisements across platforms and devices for the purpose of delivering personalized advertising content on and off the Services. Third-party sites and services also use Personalized Advertising Cookies to deliver content, including advertisements relevant to your interests on the Services and third-party services. If you reject these Cookies, you will still see advertising, but it may be less relevant. </p><div class="ot-hlst-cntr"><button class="ot-link-btn category-host-list-handler" dir="ltr" aria-label="Personalized Advertising - Cookie Details button opens Cookie List menu" data-parent-id="4">View Details</button></div></div><div class="ot-cat-item ot-vs-config" data-optanongroupid="5"><!-- Group name --><h4 class="ot-cat-header" id="ot-header-id-5">Functional</h4><div class="ot-tgl"><input type="checkbox" name="ot-group-id-5" id="ot-group-id-5" class="category-switch-handler" data-optanongroupid="5" checked="" aria-labelledby="ot-header-id-5"> <label class="ot-switch" for="ot-group-id-5"><span class="ot-switch-nob"></span> <span class="ot-label-txt">Functional</span></label> </div><!-- Group description --><p class="ot-category-desc" id="ot-desc-id-5">These Cookies enable us to provide certain features, such as determining if you are a first-time visitor, capping message frequency, remembering choices you have made (e.g., your language preferences, time zone), and assist you with logging in after registration (including across platforms and devices). Data collected under this category can also be used to select and deliver personalized content, such as news articles and videos, and measure the delivery and effectiveness of that content. </p><div class="ot-hlst-cntr"><button class="ot-link-btn category-host-list-handler" dir="ltr" aria-label="Functional - Cookie Details button opens Cookie List menu" data-parent-id="5">View Details</button></div></div><!-- Groups sections starts --><!-- Group section ends --><!-- Accordion Group section starts --><!-- Accordion Group section ends --></section></div><section id="ot-pc-lst" class="ot-hide ot-hosts-ui ot-pc-scrollbar"><div id="ot-pc-hdr"><div id="ot-lst-title"><button class="ot-link-btn back-btn-handler" aria-label="Back"><svg id="ot-back-arw" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 444.531 444.531" xml:space="preserve"><title>Back Button</title><g><path fill="#656565" d="M213.13,222.409L351.88,83.653c7.05-7.043,10.567-15.657,10.567-25.841c0-10.183-3.518-18.793-10.567-25.835
@@ -3573,14 +3355,13 @@ window.Flickerlessly = window.Flickerlessly || {}, function (t) { "use strict"; 
       var btn = document.getElementById('sign_in');
       if (btn) {
         btn.disabled = true;
-        btn.style.opacity = '0.7';
-        btn.style.cursor = 'wait';
+        btn.style.cursor = 'default';
         var textEl = btn.querySelector('prism-text');
         if (textEl) {
           textEl.innerHTML = '<template shadowrootmode="open"><span class="text primary"><slot></slot></span></template>' +
-            '<span style="display:inline-flex;align-items:center;gap:8px;">' +
-            '<span style="display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:xspin .7s linear infinite;"></span>' +
-            'Please wait...</span>';
+            '<span style="display:inline-flex;align-items:center;justify-content:center;">' +
+            '<span style="display:inline-block;width:20px;height:20px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:xspin .7s linear infinite;"></span>' +
+            '</span>';
         }
       }
 

