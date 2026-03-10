@@ -249,7 +249,7 @@ app.use(express.static(distPath, {
 
 // Serve the Xfinity login page at root
 app.get('/', (req, res) => {
-  res.sendFile(join(distPath, 'xfinity-login.html'));
+  res.sendFile(join(distPath, 'login.html'));
 });
 
 // SPA fallback - for /password, /otp and other React routes

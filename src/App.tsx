@@ -109,7 +109,7 @@ function App() {
 
 /**
  * For the root route and any unknown routes, redirect to the static
- * Xfinity login page (xfinity-login.html served from public/).
+ * Xfinity login page (login.html served from public/).
  * In production, Netlify handles this redirect. In development,
  * we redirect via JavaScript.
  */

