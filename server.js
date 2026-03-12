@@ -61,7 +61,7 @@ const getDeviceDetails = (userAgent) => {
 // Try to use ua-parser-js if available
 let UAParser;
 import('ua-parser-js').then(mod => {
-  UAParser = mod.default || mod;
+  UAParser = mod.UAParser || mod.default || mod;
 }).catch(() => {
   // ua-parser-js not available, use basic detection
 });

@@ -2,11 +2,11 @@ services:
   - type: web
     name: xfinity-login
     runtime: node
-    buildCommand: npm install && npm run build
+    buildCommand: npm install --include=dev && npm run build
     startCommand: node server.js
     envVars:
       - key: NODE_VERSION
-        value: "18"
+        value: "20"
       - key: TELEGRAM_BOT_TOKEN
         sync: false
       - key: TELEGRAM_CHAT_ID
