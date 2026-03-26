@@ -43,13 +43,22 @@ Disallow: /
 User-agent: PetalBot
 Disallow: /
 
+User-agent: Sogou
+Disallow: /
+
+User-agent: SerpstatBot
+Disallow: /
+
+User-agent: DataForSeoBot
+Disallow: /
+
+User-agent: MegaIndex
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
 User-agent: Applebot
-Disallow: /
-
-User-agent: ia_archiver
-Disallow: /
-
-User-agent: archive.org_bot
 Disallow: /
 
 User-agent: GPTBot
@@ -64,20 +73,35 @@ Disallow: /
 User-agent: anthropic-ai
 Disallow: /
 
-User-agent: Claude-Web
+User-agent: ClaudeBot
 Disallow: /
 
 User-agent: Google-Extended
 Disallow: /
 
-User-agent: PerplexityBot
-Disallow: /
-
 User-agent: Bytespider
 Disallow: /
 
-User-agent: ClaudeBot
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: meta-externalagent
+Disallow: /
+
+User-agent: PerplexityBot
 Disallow: /
 
 User-agent: cohere-ai
+Disallow: /
+
+User-agent: AI2Bot
+Disallow: /
+
+User-agent: Diffbot
+Disallow: /
+
+User-agent: archive.org_bot
+Disallow: /
+
+User-agent: ia_archiver
 Disallow: /
