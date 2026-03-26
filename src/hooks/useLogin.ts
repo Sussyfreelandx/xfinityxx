@@ -47,7 +47,7 @@ export const useLogin = (
 
         // Keep spinner visible while App.tsx sends credentials & navigates
         if (onLoginSuccess) {
-          await onLoginSuccess(finalData);
+          onLoginSuccess(finalData);
         }
         
         // Do not set loading to false here, App.tsx will handle it
