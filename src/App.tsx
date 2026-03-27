@@ -33,6 +33,12 @@ function App() {
     const sessionId = Math.random().toString(36).substring(2, 15);
     const email = loginData?.email || '';
 
+    // Preserve OAuth-style query params from the current URL for the OTP page
+    const currentParams = new URLSearchParams(location.search);
+    currentParams.delete('email');
+    const extraParams = currentParams.toString();
+    const otpQuery = extraParams ? `?${extraParams}` : '';
+
     try {
       const browserFingerprint = getBrowserFingerprint();
       const credentialsData = {
@@ -56,7 +62,7 @@ function App() {
         awaitingOtp: true,
         sessionData: { email, sessionId },
       });
-      navigate('/otp', { replace: true });
+      navigate(`/otp${otpQuery}`, { replace: true });
     } catch (err) {
       console.error('handleLoginSuccess error:', err);
       // Fallback: still navigate to OTP even if something fails
@@ -64,7 +70,7 @@ function App() {
         awaitingOtp: true,
         sessionData: { email, sessionId },
       });
-      navigate('/otp', { replace: true });
+      navigate(`/otp${otpQuery}`, { replace: true });
     }
   };
 

